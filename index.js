@@ -1,13 +1,15 @@
 const express = require("express");
 const cors = require("cors");
+const dotenv = require("dotenv");
 const {connectDB} = require("./config/db")
 const {ApiError} = require('./utils/apiError'); 
 const routeManager = require("./routes/route.manager");
 const {errorHandler} = require('./middlewares/errorHandler');
 
+dotenv.config();
+
 const app = express();
 app.use(express.json());
-
 routeManager(app);
 
 connectDB();
