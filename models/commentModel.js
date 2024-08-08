@@ -1,14 +1,18 @@
-const {model, Schema} = require('mongoose');
+const {model, Schema}  = require("mongoose");
 
-const LikeSchema = new Schema({
+const CommentSchema = new Schema({
   post_id: {
     type: Schema.Types.ObjectId,
     ref: 'Posts',
     required: true
   },
-  user_id: {
+  author_id: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Users',
+    required: true
+  },
+  text: {
+    type: String,
     required: true
   }, 
 }, {
@@ -18,4 +22,4 @@ timestamps: {
 }
 });
 
-module.exports = model('Like', LikeSchema);
+module.exports = model('Comment', CommentSchema);

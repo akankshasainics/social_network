@@ -10,10 +10,15 @@ const groupSchema = new Schema({
         type: String,
         require: true,
     },
+    created_by: {
+        type: Schema.ObjectId,
+        require: true,
+        ref: 'Users'
+    },
     members: {
         type: [
             {
-                user_id: {
+                member_id: {
                     type: Schema.ObjectId, 
                     require: true,
                     ref: 'Users'
