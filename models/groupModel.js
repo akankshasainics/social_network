@@ -13,7 +13,7 @@ const groupSchema = new Schema({
     created_by: {
         type: Schema.ObjectId,
         require: true,
-        ref: 'Users'
+        ref: 'users'
     },
     members: {
         type: [
@@ -21,7 +21,7 @@ const groupSchema = new Schema({
                 member_id: {
                     type: Schema.ObjectId, 
                     require: true,
-                    ref: 'Users'
+                    ref: 'users'
                 },
                 joining_date: {
                     type: Date,
@@ -39,4 +39,4 @@ timestamps: {
 }
 } )
 
-module.exports = model('Group', groupSchema);
+module.exports = model('group', groupSchema);

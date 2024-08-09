@@ -3,12 +3,12 @@ const {model, Schema}  = require("mongoose");
 const CommentSchema = new Schema({
   post_id: {
     type: Schema.Types.ObjectId,
-    ref: 'Posts',
+    ref: 'posts',
     required: true
   },
   author_id: {
     type: Schema.Types.ObjectId,
-    ref: 'Users',
+    ref: 'users',
     required: true
   },
   text: {
@@ -22,4 +22,4 @@ timestamps: {
 }
 });
 
-module.exports = model('Comment', CommentSchema);
+module.exports = model('comment', CommentSchema);

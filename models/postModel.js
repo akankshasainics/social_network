@@ -3,12 +3,12 @@ const {Schema, model} = require("mongoose");
 const PostSchema = new Schema({
   group_id: {
     type: Schema.Types.ObjectId,
-    ref: 'Groups',
+    ref: 'groups',
     required: true
   },
   author_id: {
     type: Schema.Types.ObjectId,
-    ref: 'Users',
+    ref: 'users',
     required: true
   },
   title: {
@@ -34,4 +34,4 @@ const PostSchema = new Schema({
 }}
 );
 
-module.exports = model('Post', PostSchema);
+module.exports = model('post', PostSchema);

@@ -20,7 +20,7 @@ const userSchema = new Schema({
     },
     joined_groups: {
         type: [Schema.ObjectId],
-        ref: 'Groups'
+        ref: 'groups'
     }
 }, {
 timestamps: {
@@ -29,4 +29,4 @@ timestamps: {
 }
 });
 
-module.exports = model("User", userSchema)
+module.exports = model("user", userSchema)
