@@ -17,6 +17,10 @@ const userSchema = new Schema({
     password_hash: {
         type: String,
         require: true
+    },
+    joined_groups: {
+        type: [Schema.ObjectId],
+        ref: 'Groups'
     }
 }, {
 timestamps: {
