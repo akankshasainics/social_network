@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const {ApiError} = require("../utils/apiError");
-const {createSocialGroup, findOneGroup} = require("../dataAccess/groupAccess")
+const {createSocialGroup, findOneGroup, findGroups} = require("../dataAccess/groupAccess")
 const {addGroup} = require("../dataAccess/userAccess")
 
 const createGroup = async(req, res, next) => {
@@ -41,6 +41,21 @@ const createGroup = async(req, res, next) => {
     }
 }
 
+const getGroupList = async(req, res, next) => {
+    try {
+        const list = await findGroups();
+         res.status(201).json({
+            status: 'success',
+            data: list
+        });
+
+    } catch(error) {
+        next(new ApiError(error.message, 400))
+    }
+
+}
+
 module.exports = {
-    createGroup
+    createGroup,
+    getGroupList
 }
