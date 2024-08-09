@@ -12,7 +12,12 @@ const updateSocialPost = async(postId, update) => {
     });
 }
 
+const findOnePost = async(query = {}) => {
+    return await Post.findOne(query);
+}
+
 module.exports = {
     createSocialPost,
-    updateSocialPost
+    updateSocialPost,
+    findOnePost
 }

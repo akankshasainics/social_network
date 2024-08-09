@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
-const {ApiError} = require("../utils/apiError");
-const {createSocialPost} = require("../dataAccess/postAccess")
+const { ApiError } = require("../utils/apiError");
+const {createSocialPost, findOnePost, updateSocialPost} = require("../dataAccess/postAccess")
 const {findOneGroup} = require("../dataAccess/groupAccess");
+const {findOneLike, addLikeOnPost} = require("../dataAccess/likeAccess");
 
 const createPost = async(req, res, next) => {
     try {
@@ -33,7 +34,39 @@ const createPost = async(req, res, next) => {
     }
 }
 
+const likePost = async(req, res, next) => {
+    try {
+        const userId = req.user._id;
+        const {postId} = req.params;
+        const post = await findOnePost({_id: postId});
+        if(!post) {
+            throw new Error("Post does not exists")
+        }
+        const query = {
+            post_id: postId,
+            user_id: userId
+        }
+        const likeExists = await findOneLike(query);
+        if(likeExists)
+        {
+            throw new Error("You already liked the post")
+        }
+        const update = {
+            $inc: {likes_count: 1}
+        }
+        await updateSocialPost(postId, update);
+        await addLikeOnPost(query);
+        res.status(200).json({
+            status: "success"
+        })
+    } catch(error) {
+        console.log(error);
+        next(new ApiError(error.message, 400))
+    }
+}
+
 
 module.exports = {
-    createPost
+    createPost,
+    likePost
 }
