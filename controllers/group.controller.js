@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const {ApiError} = require("../utils/apiError");
-const {createSocialGroup, findOneGroup, findGroups} = require("../dataAccess/groupAccess")
-const {addGroup} = require("../dataAccess/userAccess")
+const {createSocialGroup, findOneGroup, findGroups, addMember} = require("../dataAccess/groupAccess")
+const {addGroup, findOneUser} = require("../dataAccess/userAccess")
 
 const createGroup = async(req, res, next) => {
    // const session = await mongoose.startSession();
@@ -52,10 +52,34 @@ const getGroupList = async(req, res, next) => {
     } catch(error) {
         next(new ApiError(error.message, 400))
     }
+}
 
+const joinGroup = async(req, res, next) => {
+    try {
+        const {groupId} = req.params;
+        const userId = req.user._id;
+        const query = {
+            _id: userId,
+            joined_groups: {$in: [groupId]}
+        }
+        const groupExists = await findOneUser(query);
+        if(groupExists)
+        {
+            throw new Error("Group already joined.")
+        }
+        await addGroup(userId, groupId);
+        await addMember(groupId, userId);
+        res.status(200).json({
+            status: "sucess",
+            data: "Group joined successfully"
+        })
+    } catch(error) {
+        next(new ApiError(error.message, 400))
+    }
 }
 
 module.exports = {
     createGroup,
-    getGroupList
+    getGroupList,
+    joinGroup
 }

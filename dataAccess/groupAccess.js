@@ -33,8 +33,17 @@ const findGroups = async() => {
     ]);
 }
 
+const addMember = async(groupId, userId, session = null) => {
+    return await Group.updateOne({
+        _id: groupId
+    }, {
+        $push: {members: {member_id: userId}}
+    })
+}
+
 module.exports = {
     createSocialGroup,
     findOneGroup,
-    findGroups
+    findGroups,
+    addMember
 }
