@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const {ApiError} = require("../utils/apiError");
 const {createSocialGroup, findOneGroup, findGroups, addMember} = require("../dataAccess/groupAccess")
-const {addGroup, findOneUser} = require("../dataAccess/userAccess")
+const {addGroup, findOneUser} = require("../dataAccess/userAccess");
+const { findPostsOfGroup } = require("../dataAccess/postAccess");
 
 const createGroup = async(req, res, next) => {
    // const session = await mongoose.startSession();
@@ -78,8 +79,35 @@ const joinGroup = async(req, res, next) => {
     }
 }
 
+const getPosts = async(req, res, next) => {
+    try {
+        const {groupId} = req.params;
+        const {page = 1, limit = 20} = req.query;
+        const group = await findOneGroup({_id: groupId});
+        if(!group)
+        {
+            throw new Error("Group does not exists.")
+        }
+        const data = {
+            skip: (parseInt(page)-1)*limit,
+            limit: parseInt(limit),
+            groupId
+        }
+        const result = await findPostsOfGroup(data);
+        res.status(200).json({
+            status: "sucess",
+            length: result.length,
+            data: result
+        })
+           
+    } catch(error) {
+        next(new ApiError(error.message, 400))
+    }
+}
+
 module.exports = {
     createGroup,
     getGroupList,
-    joinGroup
+    joinGroup,
+    getPosts
 }
