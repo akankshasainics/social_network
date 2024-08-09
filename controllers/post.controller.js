@@ -3,6 +3,7 @@ const { ApiError } = require("../utils/apiError");
 const {createSocialPost, findOnePost, updateSocialPost} = require("../dataAccess/postAccess")
 const {findOneGroup} = require("../dataAccess/groupAccess");
 const {findOneLike, addLikeOnPost} = require("../dataAccess/likeAccess");
+const {addComment} = require("../dataAccess/commentAccess");
 
 const createPost = async(req, res, next) => {
     try {
@@ -65,8 +66,36 @@ const likePost = async(req, res, next) => {
     }
 }
 
+const commentOnPost = async(req, res, next) => {
+    try {
+        const userId = req.user._id;
+        const {postId} = req.params;
+        const post = await findOnePost({_id: postId});
+        if(!post) {
+            throw new Error("Post does not exists")
+        }
+        const comment = {
+            text: req.body.text,
+            post_id: postId,
+            author_id: userId
+        }
+        await addComment(comment)
+        const update = {
+            $inc: {comments_count: 1}
+        }
+        await updateSocialPost(postId, update);
+        res.status(201).json({
+            status: "success",
+            data: "Comment added successfully"
+        })
+    } catch(error) {
+        next(new ApiError(error.message, 400));
+    }
+}
+
 
 module.exports = {
     createPost,
-    likePost
+    likePost,
+    commentOnPost
 }

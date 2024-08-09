@@ -5,6 +5,6 @@ const postController = require("../controllers/post.controller");
 
 router.post('/', authenticateUser, postController.createPost);
 router.post('/:postId/like', authenticateUser, postController.likePost);
-//router.post('/:postId/comments', authenticateUser, postController.commentOnPost)
+router.post('/:postId/comments', authenticateUser, postController.commentOnPost)
 
 module.exports = router;
