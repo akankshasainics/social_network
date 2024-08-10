@@ -1,7 +1,7 @@
 const Group = require('../models/groupModel');
 
 const createSocialGroup = async (group, session = null) => {
-    return await Group.create(group);
+    return await Group.create([group], {session});
 }
 
 const findOneGroup = async (query = {}) => {
@@ -38,7 +38,7 @@ const addMember = async (groupId, userId, session = null) => {
         _id: groupId
     }, {
         $push: { members: { member_id: userId } }
-    })
+    }).session(session);
 }
 
 module.exports = {

@@ -1,5 +1,5 @@
 const { ApiError } = require("../utils/apiError");
-const { findUsersTimelinePosts } = require("../dataAccess/userAccess");
+const { findUsersTimelinePosts } = require("../db/user");
 
 /**
  * get posts of groups join by the user
@@ -21,7 +21,7 @@ const getTimelinePosts = async (req, res, next) => {
             data: result
         })
     } catch (error) {
-        next(new ApiError(error.message, 400))
+        next(new ApiError(error.message, 500))
     }
 }
 

@@ -1,16 +1,16 @@
 const mongoose = require("mongoose");
 const { ApiError } = require("../utils/apiError");
-const { createSocialGroup, findOneGroup, findGroups, addMember } = require("../dataAccess/groupAccess")
-const { addGroup, findOneUser } = require("../dataAccess/userAccess");
-const { findPostsOfGroup } = require("../dataAccess/postAccess");
+const { createSocialGroup, findOneGroup, findGroups, addMember } = require("../db/group")
+const { addGroup, findOneUser } = require("../db/user");
+const { findPostsOfGroup } = require("../db/post");
 
 /**
   Create a social group 
  */
 const createGroup = async (req, res, next) => {
-    // const session = await mongoose.startSession();
+    const session = await mongoose.startSession();
     try {
-        //    session.startTransaction();
+        session.startTransaction();
         const user = req.user;
         const { name, description } = req.body;
         const group = {
@@ -27,19 +27,19 @@ const createGroup = async (req, res, next) => {
         if (duplicateExists) {
             next(new ApiError("Group name already exists. Try some another name.", 400))
         }
-        const result = await createSocialGroup(group);
-        await addGroup(user._id, result._doc._id);
+        const result = await createSocialGroup(group, session);
+        await addGroup(user._id, result._id, session);
         res.status(201).json({
             status: 'success',
             data: "Group created successfully"
         });
-        //   await session.commitTransaction();
+        await session.commitTransaction();
     } catch (error) {
-        //  await session.abortTransaction();
+        await session.abortTransaction();
         next(new ApiError(error.message, 400))
     }
     finally {
-        // await session.endSession();
+        await session.endSession();
     }
 }
 
@@ -63,7 +63,9 @@ const getGroupList = async (req, res, next) => {
 * join the group if not already join  
  */
 const joinGroup = async (req, res, next) => {
+    const session = await mongoose.startSession();
     try {
+        session.startTransaction();
         const { groupId } = req.params;
         const userId = req.user._id;
         const query = {
@@ -72,16 +74,21 @@ const joinGroup = async (req, res, next) => {
         }
         const groupExists = await findOneUser(query);
         if (groupExists) {
-            throw new Error("Group already joined.")
+            next(new ApiError("Group already joined.", 400))
         }
-        await addGroup(userId, groupId);
-        await addMember(groupId, userId);
+        await addGroup(userId, groupId, session);
+        await addMember(groupId, userId, session);
         res.status(200).json({
             status: "success",
             data: "Group joined successfully"
         })
+        await session.commitTransaction();
     } catch (error) {
-        next(new ApiError(error.message, 400))
+        await session.abortTransaction();
+        next(new ApiError(error.message, 500))
+    }
+    finally {
+        await session.endSession();
     }
 }
 
@@ -94,7 +101,7 @@ const getPosts = async (req, res, next) => {
         const { page = 1, limit = 20 } = req.query;
         const group = await findOneGroup({ _id: groupId });
         if (!group) {
-            throw new Error("Group does not exists.")
+            next(new ApiError("Group does not exists", 404))
         }
         const data = {
             skip: (parseInt(page) - 1) * limit,
@@ -109,7 +116,7 @@ const getPosts = async (req, res, next) => {
         })
 
     } catch (error) {
-        next(new ApiError(error.message, 400))
+        next(new ApiError(error.message, 500))
     }
 }
 

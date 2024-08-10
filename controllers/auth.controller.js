@@ -1,6 +1,6 @@
 const { ApiError } = require('../utils/apiError');
 const { encryptText } = require("../utils/encryption");
-const { findOneUser } = require("../dataAccess/userAccess");
+const { findOneUser } = require("../db/user");
 const { generateToken } = require("../utils/jwt");
 
 /**

@@ -3,16 +3,16 @@ const { Schema, model } = require("mongoose");
 const groupSchema = new Schema({
     name: {
         type: String,
-        require: true,
+        required: true,
         unique: true,
     },
     description: {
         type: String,
-        require: true,
+        required: true,
     },
     created_by: {
         type: Schema.ObjectId,
-        require: true,
+        required: true,
         ref: 'users'
     },
     members: {
@@ -20,7 +20,7 @@ const groupSchema = new Schema({
             {
                 member_id: {
                     type: Schema.ObjectId,
-                    require: true,
+                    required: true,
                     ref: 'users'
                 },
                 joining_date: {

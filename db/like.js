@@ -1,7 +1,7 @@
 const Like = require('../models/likeModel');
 
-const addLikeOnPost = async (data) => {
-    return await Like.create(data);
+const addLikeOnPost = async (data, session) => {
+    return await Like.create([data], {session: session});
 }
 
 const findOneLike = async (query = {}) => {

@@ -1,7 +1,7 @@
 const { ApiError } = require("../utils/apiError");
 const { verifyToken } = require("../utils/jwt");
-const { findOneUser } = require("../dataAccess/userAccess");
-const { findOnePost } = require("../dataAccess/postAccess");
+const { findOneUser } = require("../db/user");
+const { findOnePost } = require("../db/post");
 
 /**
  * authenticate user based on JWT token

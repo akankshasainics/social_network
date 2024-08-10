@@ -5,12 +5,12 @@ const createSocialPost = async (post) => {
     return await Post.create(post);
 }
 
-const updateSocialPost = async (postId, update) => {
+const updateSocialPost = async (postId, update, session = null) => {
     return await Post.updateOne({
         _id: postId
     }, {
         ...update
-    });
+    }).session(session);
 }
 
 const findOnePost = async (query = {}) => {
@@ -66,6 +66,7 @@ const findPostsOfGroup = async (data) => {
         }
     ])
 }
+
 
 module.exports = {
     createSocialPost,

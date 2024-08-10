@@ -5,10 +5,10 @@ const createUserValidator = [
     body('password')
         .isLength({ min: 6 })
         .withMessage('Password must be at least 6 characters long'),
-    body('first_name')
+    body('firstName')
         .notEmpty()
         .withMessage('First Name is required'),
-    body('last_name')
+    body('lastName')
         .notEmpty()
         .withMessage('Last Name is required'),
 ];
