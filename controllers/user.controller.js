@@ -1,15 +1,18 @@
-const {createSocialUser, findOneUser} = require("../dataAccess/userAccess")
+const { createSocialUser, findOneUser } = require("../dataAccess/userAccess")
 const { ApiError } = require('../utils/apiError');
 const { encryptText } = require("../utils/encryption");
 
+/**
+ * Create user
+ * Each user should have unique email
+ */
 const createUser = async (req, res, next) => {
     try {
-        const {firstName, lastName, email, password} = req.body;
-        const duplicateUser = await findOneUser({email: email});
-        if(duplicateUser)
-            {
-                throw new Error("Email already exists");
-            }
+        const { firstName, lastName, email, password } = req.body;
+        const duplicateUser = await findOneUser({ email: email });
+        if (duplicateUser) {
+            throw new Error("Email already exists");
+        }
         const hashPassword = encryptText(password);
         const user = {
             first_name: firstName,

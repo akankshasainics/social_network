@@ -1,4 +1,4 @@
-const {model, Schema} = require('mongoose');
+const { model, Schema } = require('mongoose');
 
 const LikeSchema = new Schema({
   post_id: {
@@ -10,12 +10,12 @@ const LikeSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'users',
     required: true
-  }, 
+  },
 }, {
-timestamps: {
+  timestamps: {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
-}
+  }
 });
 
 module.exports = model('like', LikeSchema);

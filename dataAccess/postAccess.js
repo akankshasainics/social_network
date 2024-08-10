@@ -1,11 +1,11 @@
 const { default: mongoose } = require('mongoose');
 const Post = require('../models/postModel');
 
-const createSocialPost = async(post) => {
+const createSocialPost = async (post) => {
     return await Post.create(post);
 }
 
-const updateSocialPost = async(postId, update) => {
+const updateSocialPost = async (postId, update) => {
     return await Post.updateOne({
         _id: postId
     }, {
@@ -13,12 +13,12 @@ const updateSocialPost = async(postId, update) => {
     });
 }
 
-const findOnePost = async(query = {}) => {
+const findOnePost = async (query = {}) => {
     return await Post.findOne(query);
 }
 
-const findPostsOfGroup = async(data) => {
-    const {groupId, limit, skip} =  data;
+const findPostsOfGroup = async (data) => {
+    const { groupId, limit, skip } = data;
     return await Post.aggregate([
         {
             $match: {
@@ -64,7 +64,7 @@ const findPostsOfGroup = async(data) => {
         {
             $limit: limit
         }
-        ])
+    ])
 }
 
 module.exports = {

@@ -1,4 +1,4 @@
-const {model, Schema}  = require("mongoose");
+const { model, Schema } = require("mongoose");
 
 const CommentSchema = new Schema({
   post_id: {
@@ -14,12 +14,12 @@ const CommentSchema = new Schema({
   text: {
     type: String,
     required: true
-  }, 
+  },
 }, {
-timestamps: {
+  timestamps: {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
-}
+  }
 });
 
 module.exports = model('comment', CommentSchema);

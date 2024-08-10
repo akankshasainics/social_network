@@ -1,5 +1,8 @@
 const jwt = require("jsonwebtoken");
 
+/**
+ * Generate JWT token using secret key for given userId
+ */
 const generateToken = (userId) => {
     let jwtSecretKey = process.env.JWT_SECRET_KEY;
     let data = {
@@ -10,8 +13,11 @@ const generateToken = (userId) => {
     return token;
 }
 
+/**
+ * verify JWT token with secret key
+ */
 const verifyToken = (token) => {
     return jwt.verify(token, process.env.JWT_SECRET_KEY);
 }
 
-module.exports = {generateToken, verifyToken};
+module.exports = { generateToken, verifyToken };

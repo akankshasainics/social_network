@@ -1,21 +1,22 @@
 const mongoose = require("mongoose");
 const { ApiError } = require("../utils/apiError");
-const {createSocialPost, findOnePost, updateSocialPost} = require("../dataAccess/postAccess")
-const {findOneGroup} = require("../dataAccess/groupAccess");
-const {findOneLike, addLikeOnPost} = require("../dataAccess/likeAccess");
-const {addComment} = require("../dataAccess/commentAccess");
+const { createSocialPost, findOnePost, updateSocialPost } = require("../dataAccess/postAccess")
+const { findOneGroup } = require("../dataAccess/groupAccess");
+const { findOneLike, addLikeOnPost } = require("../dataAccess/likeAccess");
+const { addComment } = require("../dataAccess/commentAccess");
 
-const createPost = async(req, res, next) => {
+/**
+ * create Post in a group   
+ */
+const createPost = async (req, res, next) => {
     try {
         const userId = req.user._id;
-        const {groupId, title, content} = req.body;
-        const groupExists = await findOneGroup({_id: mongoose.Types.ObjectId.createFromHexString(groupId)});
-        if(!groupExists)
-        {
+        const { groupId, title, content } = req.body;
+        const groupExists = await findOneGroup({ _id: mongoose.Types.ObjectId.createFromHexString(groupId) });
+        if (!groupExists) {
             throw new Error("Group associated with Post no longer exists")
         }
-        if(!groupExists.members?.find(m => m.member_id.equals(userId)))
-        {
+        if (!groupExists.members?.find(m => m.member_id.equals(userId))) {
             throw new Error("User is not a member of group, Please check.")
         }
         const post = {
@@ -29,18 +30,21 @@ const createPost = async(req, res, next) => {
             status: "success",
             data: "Post created successfully"
         })
-    } catch(error) {
+    } catch (error) {
         console.log(error)
         next(new ApiError(error.message, 400))
     }
 }
 
-const likePost = async(req, res, next) => {
+/**
+ * like the post if not already liked
+ */
+const likePost = async (req, res, next) => {
     try {
         const userId = req.user._id;
-        const {postId} = req.params;
-        const post = await findOnePost({_id: postId});
-        if(!post) {
+        const { postId } = req.params;
+        const post = await findOnePost({ _id: postId });
+        if (!post) {
             throw new Error("Post does not exists")
         }
         const query = {
@@ -48,30 +52,32 @@ const likePost = async(req, res, next) => {
             user_id: userId
         }
         const likeExists = await findOneLike(query);
-        if(likeExists)
-        {
+        if (likeExists) {
             throw new Error("You already liked the post")
         }
         const update = {
-            $inc: {likes_count: 1}
+            $inc: { likes_count: 1 }
         }
         await updateSocialPost(postId, update);
         await addLikeOnPost(query);
         res.status(200).json({
             status: "success"
         })
-    } catch(error) {
+    } catch (error) {
         console.log(error);
         next(new ApiError(error.message, 400))
     }
 }
 
-const commentOnPost = async(req, res, next) => {
+/**
+ * Comment on a post 
+ */
+const commentOnPost = async (req, res, next) => {
     try {
         const userId = req.user._id;
-        const {postId} = req.params;
-        const post = await findOnePost({_id: postId});
-        if(!post) {
+        const { postId } = req.params;
+        const post = await findOnePost({ _id: postId });
+        if (!post) {
             throw new Error("Post does not exists")
         }
         const comment = {
@@ -81,14 +87,14 @@ const commentOnPost = async(req, res, next) => {
         }
         await addComment(comment)
         const update = {
-            $inc: {comments_count: 1}
+            $inc: { comments_count: 1 }
         }
         await updateSocialPost(postId, update);
         res.status(201).json({
             status: "success",
             data: "Comment added successfully"
         })
-    } catch(error) {
+    } catch (error) {
         next(new ApiError(error.message, 400));
     }
 }

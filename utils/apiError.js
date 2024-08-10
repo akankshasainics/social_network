@@ -1,3 +1,6 @@
+/**
+ * Custom Error class to handle errors 
+ */
 class ApiError extends Error {
     constructor(message, statusCode) {
         super(message);
@@ -6,4 +9,4 @@ class ApiError extends Error {
     }
 }
 
-module.exports = {ApiError};
+module.exports = { ApiError };

@@ -1,4 +1,4 @@
-const { Schema, model }  = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const userSchema = new Schema({
     email: {
@@ -23,10 +23,10 @@ const userSchema = new Schema({
         ref: 'groups'
     }
 }, {
-timestamps: {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
-}
+    timestamps: {
+        createdAt: 'created_at',
+        updatedAt: 'updated_at'
+    }
 });
 
 module.exports = model("user", userSchema)

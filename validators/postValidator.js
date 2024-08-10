@@ -1,5 +1,5 @@
 const { body } = require('express-validator');
-const {isValidObjectId, objectIdValidator} = require("../validators/customValidator")
+const { isValidObjectId, objectIdValidator } = require("../validators/customValidator")
 
 
 const createPostValidator = [
@@ -18,7 +18,7 @@ const addCommentValidator = [
     body('text')
         .notEmpty()
         .withMessage('text is required'),
-    objectIdValidator('postId') 
+    objectIdValidator('postId')
 ];
 
 module.exports = {

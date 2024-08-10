@@ -1,4 +1,4 @@
-const {Schema, model} = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const PostSchema = new Schema({
   group_id: {
@@ -31,7 +31,8 @@ const PostSchema = new Schema({
   timestamps: {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
-}}
+  }
+}
 );
 
 module.exports = model('post', PostSchema);

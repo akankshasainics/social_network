@@ -1,13 +1,17 @@
 const { ApiError } = require("../utils/apiError");
-const {findUsersTimelinePosts} = require("../dataAccess/userAccess");
+const { findUsersTimelinePosts } = require("../dataAccess/userAccess");
 
-const getTimelinePosts = async(req, res, next) => {
+/**
+ * get posts of groups join by the user
+ * sorted by newest first 
+ */
+const getTimelinePosts = async (req, res, next) => {
     try {
         const userId = req.user._id;
-        const {page = 1, limit = 20} = req.query;
+        const { page = 1, limit = 20 } = req.query;
         const data = {
             userId,
-            skip: (parseInt(page) - 1)*parseInt(limit),
+            skip: (parseInt(page) - 1) * parseInt(limit),
             limit: parseInt(limit)
         }
         const result = await findUsersTimelinePosts(data);
@@ -16,8 +20,7 @@ const getTimelinePosts = async(req, res, next) => {
             length: result.length,
             data: result
         })
-    } catch(error)
-    {
+    } catch (error) {
         next(new ApiError(error.message, 400))
     }
 }

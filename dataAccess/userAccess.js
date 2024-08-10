@@ -1,30 +1,29 @@
 const User = require('../models/userModel');
-const mongoose = require("mongoose");
 
-const createSocialUser = async(user) => {
+const createSocialUser = async (user) => {
     return await User.create(user);
 }
 
-const findOneUser = async(query = {}) => {
+const findOneUser = async (query = {}) => {
     return await User.findOne(query);
 }
 
-const addGroup = async(userId, groupId, session = null) => {
+const addGroup = async (userId, groupId, session = null) => {
     return await User.updateOne(
-    {
-       _id: userId
-    },{
-        $push: {joined_groups: groupId}
+        {
+            _id: userId
+        }, {
+        $push: { joined_groups: groupId }
     }).session(session);
 }
 
-const findUsersTimelinePosts = async(data) => {
-    const {userId, skip, limit} = data;
+const findUsersTimelinePosts = async (data) => {
+    const { userId, skip, limit } = data;
     return await User.aggregate([
         {
-           $match: {
-            _id: userId
-           } 
+            $match: {
+                _id: userId
+            }
         },
         {
             $lookup: {
@@ -38,7 +37,7 @@ const findUsersTimelinePosts = async(data) => {
             $unwind: '$posts'
         },
         {
-            $replaceRoot: {newRoot: '$posts'}
+            $replaceRoot: { newRoot: '$posts' }
         },
         {
             $lookup: {
@@ -67,7 +66,7 @@ const findUsersTimelinePosts = async(data) => {
                 author_name: {
                     $concat: [
                         "$users.first_name", " ", "$users.last_name"]
-                },          
+                },
                 group_name: "$groups.name"
             }
         },

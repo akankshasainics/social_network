@@ -1,4 +1,4 @@
-const {Schema, model} = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const groupSchema = new Schema({
     name: {
@@ -19,7 +19,7 @@ const groupSchema = new Schema({
         type: [
             {
                 member_id: {
-                    type: Schema.ObjectId, 
+                    type: Schema.ObjectId,
                     require: true,
                     ref: 'users'
                 },
@@ -27,16 +27,16 @@ const groupSchema = new Schema({
                     type: Date,
                     default: Date.now,
                 }
-                
+
             }
         ]
     }
-   
+
 }, {
-timestamps: {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
-}
-} )
+    timestamps: {
+        createdAt: 'created_at',
+        updatedAt: 'updated_at'
+    }
+})
 
 module.exports = model('group', groupSchema);

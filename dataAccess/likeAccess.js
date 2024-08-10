@@ -1,14 +1,14 @@
 const Like = require('../models/likeModel');
 
-const addLikeOnPost = async(data) => {
+const addLikeOnPost = async (data) => {
     return await Like.create(data);
 }
 
-const findOneLike = async(query = {}) => {
-    return await Like.findOne({...query})
+const findOneLike = async (query = {}) => {
+    return await Like.findOne({ ...query })
 }
 
-module.exports  = {
+module.exports = {
     addLikeOnPost,
     findOneLike
 }
