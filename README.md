@@ -6,6 +6,6 @@
 - MongoDB
 
 ## Steps to run the application in development mode
-1. Replace the MongoDB connection string with `MONGO_CONNECTION` in `/config/constant.js`.
+1. Replace the MongoDB connection string with `MONGO_CONNECTION` in `.env` file.
 2. Run `npm i`.
 3. Run `npm run dev`.
